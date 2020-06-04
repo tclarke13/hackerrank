@@ -1,14 +1,4 @@
-def maximumToys(prices, k):
-    sortedPrices = sorted(prices)
-    total = 0
-    numItems = 0
-    for price in sortedPrices:
-        if total + price <= k:
-            numItems += 1
-            total += price
-        else:
-            break
-    return numItems
+
 
 if __name__ == '__main__':
 

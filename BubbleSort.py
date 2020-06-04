@@ -14,7 +14,7 @@ def countSwaps(a):
     return swaps
 
 if __name__ == '__main__':
-    infile = "Input//BubbleSort.txt"
+    infile = "Input//Test.txt"
     with open(infile, 'r') as f:
         n = int(f.readline())
 

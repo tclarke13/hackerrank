@@ -30,7 +30,7 @@ def countTriplets(arr, r):
 
 if __name__ == '__main__':
 
-    infile = "Input//CountTriplets.txt"
+    infile = "Input//Test.txt"
     with open(infile, 'r') as f:
         nr = f.readline().rstrip().split()
 
