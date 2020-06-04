@@ -1,45 +1,27 @@
-import math
-import os
-import random
-import re
-import sys
 from collections import defaultdict
-from math import factorial
 
 # Complete the countTriplets function below.
 def countTriplets(arr, r):
-    if len(arr) < 3:
-        return 0
     dic = defaultdict(list)
     for i in range(len(arr)):
         v = arr[i]
         dic[v].append(i)
-    print(dic)
     count = 0
-    if r == 1:
-        for k in dic:
-            l = len(dic[k])
-            if l >= 3:
-                count += factorial(l) / (factorial(l - 3) * factorial(3))
-        return int(count)
     for k in dic:
-        if k * r * r < 10**9 and k * r in dic and k * r * r in dic:
+        if k * r in dic and k * r * r in dic:
             idx_left = 0
             idx_mid = 0
             idx_right = 0
             len_left = len(dic[k])
             len_mid = len(dic[k*r])
             len_right = len(dic[k*r*r])
-            #print(dic[k][idx_left])
-            #print(dic[k*r][idx_mid])
-            #print(dic[k*r*r][idx_right])
-            while idx_left < len_left and idx_mid < len_mid and idx_right < len_right:
-                if dic[k*r][idx_mid] >= dic[k*r*r][idx_right]:
+            while idx_mid < len_mid:
+                if idx_right < len_right and dic[k*r][idx_mid] >= dic[k*r*r][idx_right]:
                     idx_right += 1
-                elif dic[k][idx_left] >= dic[k*r][idx_mid]:
+                elif idx_mid < len_mid and dic[k][idx_left] >= dic[k*r][idx_mid]:
                     idx_mid += 1
                 else:
-                    while idx_left < len_left - 1 and dic[k][idx_left] < dic[k*r][idx_mid]:
+                    while idx_left < len_left - 1 and dic[k][idx_left + 1] < dic[k*r][idx_mid]:
                         idx_left += 1
                     count += (idx_left + 1) * (len_right - idx_right)
                     idx_mid += 1
@@ -47,18 +29,17 @@ def countTriplets(arr, r):
 
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    nr = input().rstrip().split()
+    infile = "Input//CountTriplets.txt"
+    with open(infile, 'r') as f:
+        nr = f.readline().rstrip().split()
 
-    n = int(nr[0])
+        n = int(nr[0])
 
-    r = int(nr[1])
+        r = int(nr[1])
 
-    arr = list(map(int, input().rstrip().split()))
+        arr = list(map(int, f.readline().rstrip().split()))
 
-    ans = countTriplets(arr, r)
+        ans = countTriplets(arr, r)
 
-    fptr.write(str(ans) + '\n')
-
-    fptr.close()
+        print(str(ans) + '\n')
