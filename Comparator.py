@@ -1,17 +1,34 @@
+from functools import cmp_to_key
+class Player:
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
 
+    def __repr__(self):
+        "{} {}".format(self.name, self.score)
 
-if __name__ == '__main__':
+    def comparator(a, b):
+        if a.score > b.score:
+            return -1
+        elif a.score < b.score:
+            return 1
+        elif a.name < b.name:
+            return -1
+        elif a.name > b.name:
+            return 1
+        else:
+            return 0
 
-    infile = "Input//Test.txt"
-    with open(infile, 'r') as f:
-        nr = f.readline().rstrip().split()
+#Everything below is locked
+with open("Input//Test.txt", "r") as f:
+    n = int(f.readline())
+    data = []
+    for i in range(n):
+        name, score = f.readline().split()
+        score = int(score)
+        player = Player(name, score)
+        data.append(player)
 
-        n = int(nr[0])
-
-        r = int(nr[1])
-
-        arr = list(map(int, f.readline().rstrip().split()))
-
-        ans = maximumToys(arr, r)
-
-        print(str(ans) + '\n')
+    data = sorted(data, key=cmp_to_key(Player.comparator))
+    for i in data:
+        print(i.name, i.score)
