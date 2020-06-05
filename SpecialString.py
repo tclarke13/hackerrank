@@ -1,40 +1,30 @@
 def substrCount(n, s):
-    dp = []
-    P = []
+    counts = []
+    letter = s[0]
+    letterCount = 1
+    for i in range(1, n):
+        if s[i] != letter:
+            counts.append([letter, letterCount])
+            letterCount = 0
+        letterCount += 1
+        letter = s[i]
+    counts.append([letter, letterCount])
 
-    for i in range(n):
-        dp.append([0 for j in range(n)])
-        P.append([False for j in range(n)])
+    totalCount = 0
 
-    for i in range(n):
-        dp[i][i] = 1
-        P[i][i] = True
+    for count in counts:
+        totalCount += int(count[1] * (count[1] + 1) / 2)
 
-    for gap in range(1, n):
-        for i in range(n - gap):
-            j = i + gap
+    for i in range(1, len(counts) - 1):
+        middle = counts[i]
+        left = counts[i - 1]
+        right = counts[i + 1]
+        if middle[1] == 1 and left[0] == right[0]:
+            totalCount += min(left[1], right[1])
 
-            if gap % 2:
-                if s[j] == s[j - 1]:
-                    if gap > 1:
-                        if P[i][j - 2] and s[j - 1] == s[j - 2]:
-                            P[i][j] = True
-                    else:
-                        P[i][j] = True
-            else:
-                if P[i + 1][j - 1] and s[i] == s[j]:
-                    if gap == 2 or (gap > 2 and s[j] == s[j - 1]):
-                        P[i][j] = True
+    return totalCount
 
-            dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1]
 
-            if P[i][j]:
-                dp[i][j] += 1
-
-    for i in range(n):
-        print(P[i])
-        print(dp[i])
-    return dp[0][n-1]
 
 
 if __name__ == '__main__':
