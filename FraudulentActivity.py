@@ -1,54 +1,53 @@
-def moveUp(arr, i):
-    while i < len(arr) - 1 and arr[i] > arr[i + 1]:
-        temp = arr[i + 1]
-        arr[i + 1] = arr[i]
-        arr[i] = temp
-        i += 1
+from collections import deque, defaultdict
 
-def moveDown(arr, i):
-    while i > 1 and arr[i] < arr[i - 1]:
-        temp = arr[i - 1]
-        arr[i - 1] = arr[i]
-        arr[i] = temp
-        i -= 1
-
-def moveUpOrDown(arr, i):
-    if i == 0:
-        moveUp(arr, i)
-    elif i == len(arr) - 1:
-        moveDown(arr, i)
-    else:
-        if arr[i] > arr[i + 1]:
-            moveUp(arr, i)
-        elif arr[i] < arr[i - 1]:
-            moveDown(arr, i)
-
-def removeAndInsertAndSort(arr, insertVal, removeVal):
-    i = 0
-    while i < len(arr):
-        if arr[i] == removeVal:
-            arr[i] = insertVal
-            break
-        i += 1
-    moveUpOrDown(arr, i)
-
-
-def activityNotifications(expenditure, d):
-    if len(expenditure) < d + 1:
-        return 0
-    sortedTrail = sorted(expenditure[0:d])
-    numNotifications = 0
-    for i in range(d, len(expenditure)):
-        if d % 2 == 0:
-            median = (sortedTrail[d // 2] + sortedTrail[d // 2 - 1]) / 2.0
+def calc_median(counts, d):
+    sorted_keys = sorted(counts.keys())
+    total_sum = 0
+    if d % 2: #odd
+        midpoint = d // 2 + 1
+        i = 0
+        while total_sum < midpoint:
+            total_sum += counts[sorted_keys[i]]
+            i += 1
+        median = sorted_keys[i - 1]
+    else: #even
+        midpoint = d // 2
+        i = 0
+        while total_sum < midpoint:
+            total_sum += counts[sorted_keys[i]]
+            i += 1
+        if total_sum == midpoint:
+            median = (sorted_keys[i - 1] + sorted_keys[i]) / 2.0
         else:
-            median = sortedTrail[d // 2]
-        #print(median)
-        if expenditure[i] >= median * 2:
-            numNotifications += 1
-        print(numNotifications)
-        removeAndInsertAndSort(sortedTrail, expenditure[i], expenditure[i - d])
-    return numNotifications
+            median = sorted_keys[i - 1]
+
+    return median
+
+
+
+def activity_notifications(expenditure, d):
+    median_list = deque()
+    counts = defaultdict(int)
+    for i in range(d):
+        median_list.append(expenditure[i])
+        counts[expenditure[i]] += 1
+
+    num_notifications = 0
+
+    for i in range(d, len(expenditure)):
+        if expenditure[i] >= 2 * calc_median(counts, d):
+            num_notifications += 1
+
+        if i != len(expenditure) - 1:
+            left_elem = median_list.popleft()
+            counts[left_elem] -= 1
+            if counts[left_elem] == 0:
+                del counts[left_elem]
+            median_list.append(expenditure[i])
+            counts[expenditure[i]] += 1
+
+    return num_notifications
+
 
 if __name__ == '__main__':
     with open("Input//Test.txt", "r") as f:
@@ -59,6 +58,6 @@ if __name__ == '__main__':
 
         expenditure = list(map(int, f.readline().rstrip().split()))
 
-        result = activityNotifications(expenditure, d)
+        result = activity_notifications(expenditure, d)
 
         print(str(result) + "\n")
