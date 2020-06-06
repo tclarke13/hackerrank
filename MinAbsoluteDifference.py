@@ -1,12 +1,12 @@
 
 
 def minimumAbsoluteDifference(arr):
-    smallestDiff = abs(arr[0] - arr[1])
-    for i in range(len(arr)):
-        for j in range(i + 1, len(arr)):
-            diff = abs(arr[i] - arr[j])
-            if diff < smallestDiff:
-                smallestDiff = diff
+    arr.sort()
+    smallestDiff = abs(arr[1] - arr[0])
+    for i in range(2, len(arr)):
+        diff = abs(arr[i] - arr[i-1])
+        if diff < smallestDiff:
+            smallestDiff = diff
 
     return smallestDiff
 
