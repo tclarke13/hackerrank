@@ -5,6 +5,7 @@ def find_substrings(S, D):
 
     return find_substrings_recursive(S, dict)
 
+
 def find_substrings_recursive(S, dict):
     if len(S) == 1:
         if S in dict:
@@ -18,13 +19,13 @@ def find_substrings_recursive(S, dict):
         for i in range(1, len(S)):
             left = S[0:i]
             if left in dict:
-                right_substrings = find_substrings_recursive(S[i:len(S)],dict)
+                right_substrings = find_substrings_recursive(S[i:len(S)], dict)
                 for r in right_substrings:
-                   result.append(left + " " + r)
+                    result.append(left + " " + r)
         return result
 
 
 if __name__ == '__main__':
     S = "abcd"
     D = ["a", "b", "bc", "cd", "d", "c", "abcd", "abc", "ab"]
-    print(find_substrings(S,D))
+    print(find_substrings(S, D))
