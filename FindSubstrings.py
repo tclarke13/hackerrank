@@ -21,7 +21,7 @@ def find_substrings_recursive(S, dict):
                 right_substrings = find_substrings_recursive(S[i:len(S)],dict)
                 for r in right_substrings:
                    result.append(left + " " + r)
-        return list(result)
+        return result
 
 
 if __name__ == '__main__':
