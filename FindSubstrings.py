@@ -18,10 +18,9 @@ def find_substrings_recursive(S, dict):
         for i in range(1, len(S)):
             left_substrings = find_substrings_recursive(S[0:i],dict)
             right_substrings = find_substrings_recursive(S[i:len(S)],dict)
-            if len(left_substrings) > 0 and len(right_substrings) > 0:
-                for l in left_substrings:
-                    for r in right_substrings:
-                        result.add(l + " " + r)
+            for l in left_substrings:
+               for r in right_substrings:
+                   result.add(l + " " + r)
         return list(result)
 
 
